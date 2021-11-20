@@ -21,12 +21,15 @@ namespace NextBike.Models
         public int BikeId { get; set; }
 
         [Display(Name = "Data do Aluguel")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime RentalDate { get; set; }
 
         [Display(Name = "Data de Devolução")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DeliveredDate { get; set; }
 
         [Display(Name = "Data Esperada de Devolução")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime ExpectedDeliveredDate { get; set; }
 
         [Display(Name = "Preço / Dia")]
