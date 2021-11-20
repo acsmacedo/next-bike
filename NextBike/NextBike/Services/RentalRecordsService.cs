@@ -3,7 +3,6 @@ using NextBike.Data;
 using NextBike.Interfaces;
 using NextBike.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NextBike.Services
@@ -29,11 +28,12 @@ namespace NextBike.Services
             return await _context.RentalRecords.Include(x => x.Bike).Include(x => x.Client).ToListAsync();
         }
 
-        public async Task<RentalRecords> FindByBikeIdAsync(int bike)
+        public async Task<RentalRecords> FindByIdAsync(int id)
         {
-            var data = await _context.RentalRecords.Include(x => x.Bike).Include(x => x.Client).ToListAsync();
-
-            return data.Where(x => x.BikeId == bike).LastOrDefault();
+            return await _context.RentalRecords
+                .Include(x => x.Bike)
+                .Include(x => x.Client)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(RentalRecords data)

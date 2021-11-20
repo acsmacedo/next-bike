@@ -117,27 +117,6 @@ namespace NextBike.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delivery(int? id)
-        {
-            if (!id.HasValue)
-                return BadRequest();
-
-            var bike = await _bikeService.FindByIdAsync(id.Value);
-            var record = await _rentalRecordsService.FindByBikeIdAsync(id.Value);
-
-            if (bike == null)
-                return NotFound();
-
-            bike.Status = Models.Enums.BikeStatusEnum.Available;
-            record.DeliveredDate = DateTime.Now;
-
-            await _bikeService.UpdateAsync(bike);
-
-            await _rentalRecordsService.UpdateAsync(record);
-
-            return RedirectToAction(nameof(Index));
-        }
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (!id.HasValue)

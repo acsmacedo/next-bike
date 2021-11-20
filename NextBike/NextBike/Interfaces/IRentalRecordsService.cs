@@ -7,7 +7,7 @@ namespace NextBike.Interfaces
     public interface IRentalRecordsService
     {
         Task<IEnumerable<RentalRecords>> FindAllAsync();
-        Task<RentalRecords> FindByBikeIdAsync(int bikeId);
+        Task<RentalRecords> FindByIdAsync(int bikeId);
         Task AddAsync(RentalRecords data);
         Task UpdateAsync(RentalRecords data);
     }

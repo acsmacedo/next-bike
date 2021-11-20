@@ -6,37 +6,35 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-
+<hr />
 <div>
-    <h4>Bike</h4>
-    <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bike.Brand)
+            @Html.DisplayNameFor(model => model.Bike.Brand):
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bike.Brand)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bike.Model)
+            @Html.DisplayNameFor(model => model.Bike.Model):
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bike.Model)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bike.Color)
+            @Html.DisplayNameFor(model => model.Bike.Color):
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bike.Color)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bike.Status)
+            @Html.DisplayNameFor(model => model.Bike.Status):
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bike.Status)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Bike.PricePerDay)
+            @Html.DisplayNameFor(model => model.Bike.PricePerDay):
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Bike.PricePerDay)
@@ -44,13 +42,12 @@
     </dl>
 </div>
 
+<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Rent">
             <div class="form-group">
-                <label asp-for="BikeId" class="control-label"></label>
-                <input asp-for="BikeId" class="form-control" value=@ViewData["bikeId"] />
-                <span asp-validation-for="BikeId" class="text-danger"></span>
+                <input asp-for="BikeId" class="form-control" value=@ViewData["bikeId"] type="hidden" />
             </div>
 
             <div class="form-group">
@@ -60,8 +57,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="ExpectedDeliveredDate" class="control-label"></label>
-                <input asp-for="ExpectedDeliveredDate" class="form-control" value=@ViewData["expectedDeliveredDate"] />
+                <label asp-for="ExpectedDeliveredDate" class="control-label">Data Prevista de Entrega</label>
+                <input asp-for="ExpectedDeliveredDate" class="form-control" value=@ViewData["expectedDeliveredDate"] type="date" />
                 <span asp-validation-for="ExpectedDeliveredDate" class="text-danger"></span>
             </div>
 
