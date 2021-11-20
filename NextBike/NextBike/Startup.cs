@@ -28,6 +28,7 @@ namespace NextBike
 
             services.AddTransient<IClientsService, ClientsService>();
             services.AddTransient<IBikesService, BikesService>();
+            services.AddTransient<IRentalRecordsService, RentalRecordsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

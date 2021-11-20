@@ -1,0 +1,74 @@
+﻿@model NextBike.Models.ViewModels.RentViewModel
+
+@{
+    ViewData["Title"] = "Alugar Bicicleta";
+    ViewData["bikeId"] = Model.Bike.Id;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>Bike</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bike.Brand)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bike.Brand)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bike.Model)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bike.Model)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bike.Color)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bike.Color)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bike.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bike.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Bike.PricePerDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Bike.PricePerDay)
+        </dd>
+    </dl>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Rent">
+            <div class="form-group">
+                <label asp-for="BikeId" class="control-label"></label>
+                <input asp-for="BikeId" class="form-control" value=@ViewData["bikeId"] />
+                <span asp-validation-for="BikeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label">Cliente</label>
+                <select asp-for="ClientId" class="form-control" asp-items="@(new SelectList(Model.Clients,"Id","Name"))"></select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExpectedDeliveredDate" class="control-label"></label>
+                <input asp-for="ExpectedDeliveredDate" class="form-control" value=@ViewData["expectedDeliveredDate"] />
+                <span asp-validation-for="ExpectedDeliveredDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+                <input type="submit" value="Alugar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

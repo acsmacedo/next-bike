@@ -1,22 +1,31 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NextBike.Interfaces;
 using NextBike.Models;
+using NextBike.Models.ViewModels;
 
 namespace NextBike.Controllers
 {
     public class BikesController : Controller
     {
-        private readonly IBikesService _service;
+        private readonly IBikesService _bikeService;
+        private readonly IClientsService _clientsService;
+        private readonly IRentalRecordsService _rentalRecordsService;
 
-        public BikesController(IBikesService service)
+        public BikesController(
+            IBikesService bikeService, 
+            IClientsService clientsService,
+            IRentalRecordsService rentalRecordsService)
         {
-            _service = service;
+            _bikeService = bikeService;
+            _clientsService = clientsService;
+            _rentalRecordsService = rentalRecordsService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var result = await _service.FindAllAsync();
+            var result = await _bikeService.FindAllAsync();
 
             return View(result);
         }
@@ -32,7 +41,7 @@ namespace NextBike.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _service.AddAsync(bike);
+                await _bikeService.AddAsync(bike);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -45,7 +54,7 @@ namespace NextBike.Controllers
             if (!id.HasValue)
                 return BadRequest();
 
-            var bike = await _service.FindByIdAsync(id.Value);
+            var bike = await _bikeService.FindByIdAsync(id.Value);
 
             if (bike == null)
                 return NotFound();
@@ -62,7 +71,7 @@ namespace NextBike.Controllers
 
             if (ModelState.IsValid)
             {
-                await _service.UpdateAsync(bike);
+                await _bikeService.UpdateAsync(bike);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -70,12 +79,71 @@ namespace NextBike.Controllers
             return View(bike);
         }
 
+        public async Task<IActionResult> Rent(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest();
+
+            var bike = await _bikeService.FindByIdAsync(id.Value);
+
+            if (bike == null)
+                return NotFound();
+
+            var clients = await _clientsService.FindAllAsync();
+
+            return View(new RentViewModel(bike, clients));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Rent(int? clientId, int? bikeId, DateTime? expectedDeliveredDate)
+        {
+            if (!clientId.HasValue || !bikeId.HasValue || !expectedDeliveredDate.HasValue)
+                return BadRequest();
+
+            var bike = await _bikeService.FindByIdAsync(bikeId.Value);
+            var client = await _clientsService.FindByIdAsync(clientId.Value);
+
+            if (bike == null || client == null)
+                return NotFound();
+
+            var data = new RentalRecords(client, bike, expectedDeliveredDate.Value);
+
+            await _rentalRecordsService.AddAsync(data);
+
+            bike.Status = Models.Enums.BikeStatusEnum.Rented;
+
+            await _bikeService.UpdateAsync(bike);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delivery(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest();
+
+            var bike = await _bikeService.FindByIdAsync(id.Value);
+            var record = await _rentalRecordsService.FindByBikeIdAsync(id.Value);
+
+            if (bike == null)
+                return NotFound();
+
+            bike.Status = Models.Enums.BikeStatusEnum.Available;
+            record.DeliveredDate = DateTime.Now;
+
+            await _bikeService.UpdateAsync(bike);
+
+            await _rentalRecordsService.UpdateAsync(record);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (!id.HasValue)
                 return BadRequest();
 
-            var bike = await _service.FindByIdAsync(id.Value);
+            var bike = await _bikeService.FindByIdAsync(id.Value);
 
             if (bike == null)
                 return NotFound();
@@ -87,7 +155,7 @@ namespace NextBike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _service.DeleteAsync(id);
+            await _bikeService.DeleteAsync(id);
 
             return RedirectToAction(nameof(Index));
         }

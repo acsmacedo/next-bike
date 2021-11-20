@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NextBike.Data;
 
 namespace NextBike.Migrations
 {
     [DbContext(typeof(NextBikeContext))]
-    partial class NextBikeContextModelSnapshot : ModelSnapshot
+    [Migration("20211120152531_RentalRecords")]
+    partial class RentalRecords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,10 +82,10 @@ namespace NextBike.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BikeId")
+                    b.Property<int?>("BikeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ClientId")
+                    b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeliveredDate")
@@ -98,6 +100,9 @@ namespace NextBike.Migrations
                     b.Property<DateTime>("RentalDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BikeId");
@@ -111,15 +116,11 @@ namespace NextBike.Migrations
                 {
                     b.HasOne("NextBike.Models.Bike", "Bike")
                         .WithMany()
-                        .HasForeignKey("BikeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BikeId");
 
                     b.HasOne("NextBike.Models.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
                 });
 #pragma warning restore 612, 618
         }

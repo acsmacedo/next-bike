@@ -52,6 +52,15 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary">Alterar</a>
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Apagar</a>
+
+                @if (@item.Status == NextBike.Models.Enums.BikeStatusEnum.Available)
+                {
+                    <a asp-action="Rent" asp-route-id="@item.Id" class="btn btn-outline-success">Alugar</a>
+                }
+                else if (@item.Status == NextBike.Models.Enums.BikeStatusEnum.Rented)
+                {
+                    <a asp-action="Delivery" asp-route-id="@item.Id" class="btn btn-outline-warning">Devolver</a>
+                }
             </td>
         </tr>
 }
