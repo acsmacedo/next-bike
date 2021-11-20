@@ -1,6 +1,4 @@
-using System;
-
-namespace NextBike.Models
+namespace NextBike.Models.ViewModels
 {
     public class ErrorViewModel
     {
